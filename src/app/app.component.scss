@@ -1,0 +1,8 @@
+.app-container{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding:30px 15px;
+  height: calc(100% - 80px);
+  background: var(--blue-100);
+}

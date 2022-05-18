@@ -1,0 +1,17 @@
+:host{
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: var(--primary-color);
+  padding: 20px;
+  height: 80px;
+  .title{
+    color: var(--primary-color-text	);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+  }
+  .routes{
+    display: flex;
+    gap: 10px;
+  }
+}

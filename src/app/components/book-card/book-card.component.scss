@@ -1,0 +1,27 @@
+:host {
+  width: 280px;
+  position: relative;
+
+  .img-wrapper {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    padding: 15px;
+    background: var(--gray-100);
+
+    img {
+      height: 200px;
+      max-width: 100%;
+      width: auto;
+    }
+  }
+
+  .favorites-button {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+
+  }
+
+
+}

@@ -1,0 +1,6 @@
+<ng-container *ngIf="favorites$ | async as books">
+  <div class="book-list">
+    <app-book-card *ngFor="let book of books" [isInFavorites]="!!(getIsBookInFavorites(book) | async)" (favoritesClicked)="toggleFavorites(book)" [book]="book"></app-book-card>
+  </div>
+
+</ng-container>

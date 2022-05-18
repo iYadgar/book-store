@@ -1,0 +1,13 @@
+:host{
+  overflow: auto;
+  .book-list {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    padding: 100px;
+    gap: 30px;
+    justify-content: center;
+
+  }
+}
+

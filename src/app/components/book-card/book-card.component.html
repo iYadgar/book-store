@@ -1,0 +1,48 @@
+<ng-container *ngIf="book">
+  <p-card [header]="book?.volumeInfo?.title || ''" [subheader]="book?.volumeInfo?.authors?.toString() || ''"
+          styleClass="p-card-shadow">
+    <ng-template pTemplate="header">
+      <div class="img-wrapper">
+        <img alt="Book" [src]="book?.volumeInfo?.imageLinks?.thumbnail">
+      </div>
+    </ng-template>
+    <button pButton
+            (click)="onFavoritesClick()"
+            type="button"
+            class="favorites-button p-button-raised p-button-rounded"
+            [ngClass]="{'p-button-danger':isInFavorites}"
+            [icon]="getFavoritesIcon()"
+            pRipple
+    ></button>
+    <ng-template pTemplate="footer">
+      <p-button (onClick)="onShowModal()" label="Show details" styleClass="p-button-secondary"
+                [style]="{'margin-left': '.5em'}"></p-button>
+
+    </ng-template>
+
+  </p-card>
+</ng-container>
+<ng-container *ngIf="book">
+  <p-dialog [dismissableMask]="true" [header]="book?.volumeInfo?.title  || ''" [(visible)]="isVisible">
+    <div>
+      <h4>
+        Authors: {{book?.volumeInfo?.authors?.toString()}}
+      </h4>
+      <h5>
+        Published date: {{book.volumeInfo.publishedDate}}
+      </h5>
+      <h5>
+        Language: {{book.volumeInfo.language}}
+      </h5>
+      <h5>
+        Publisher: {{book.volumeInfo.publisher}}
+      </h5>
+      <button pButton>
+        <a [href]="book.volumeInfo.previewLink" target="_blank" rel="noreferrer noopener">Preview link</a>
+      </button>
+      <a></a>
+
+    </div>
+  </p-dialog>
+</ng-container>
+
