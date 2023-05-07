@@ -1,12 +1,15 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {combineLatest, debounceTime, Observable, Subject, takeUntil} from 'rxjs';
+import {combineLatest, debounceTime, Observable, Subject, Subscription, takeUntil} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Book} from '../../state/books/book.model';
 import {BooksService} from '../../state/books/books.service';
 import {BooksQuery} from '../../state/books/books.query';
 import {GetBooksParams, PaginationModel} from '../../types';
-
+// AsyncPipe:
+// 1. subscribe - subscribing to the observable
+// 2. unsubscribe - when the component is destroyed unsubscribe is being called
+// 3. calls mark for check -
 
 @Component({
   selector: 'app-search-page',
@@ -22,7 +25,10 @@ export class SearchPageComponent implements OnDestroy, OnInit {
   totalQueriedBooks$: Observable<number>
   booksSearchTerm: FormControl;
 
-  constructor(private router: Router, private route: ActivatedRoute, private booksService: BooksService, public booksQuery: BooksQuery) {
+  constructor(private router: Router, private route: ActivatedRoute, private booksService: BooksService, public booksQuery: BooksQuery,
+    private cdr: ChangeDetectorRef) {
+    this.cdr.markForCheck() // setState
+
     this.booksSearchTerm = new FormControl();
     this.onDestroy$ = new Subject<boolean>()
     this.presentedBooks$ = this.booksQuery.selectVisibleBooks$
@@ -33,7 +39,8 @@ export class SearchPageComponent implements OnDestroy, OnInit {
       this.booksSearchTerm.valueChanges.pipe(
         debounceTime(300),
       ), this.paginationModel$]
-    ).pipe(takeUntil(this.onDestroy$)).subscribe(([term, pagination]) => {
+    ).pipe(
+      takeUntil(this.onDestroy$)).subscribe(([term, pagination]) => {
       this.updateQueryParam(term)
       this.booksService.setLoading(true)
       this.updateBooks({
@@ -45,6 +52,10 @@ export class SearchPageComponent implements OnDestroy, OnInit {
       })
 
     })
+    // this.presentedBooks$.subscribe(()=>{
+    //     this.cdr.markForCheck()
+    // })
+    // // useEffect(()=>{setState()},[presentedBooks])
 
   }
 
@@ -69,7 +80,11 @@ export class SearchPageComponent implements OnDestroy, OnInit {
       });
   }
 
+
   updateBooks(params: GetBooksParams) {
+    const subscription = this.booksService.getBooks(params).subscribe(() => {
+    })
+    subscription.unsubscribe()
     return this.booksService.getBooks(params)
   }
 

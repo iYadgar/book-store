@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BooksStore} from './books.store';
 import {HttpClient} from '@angular/common/http';
-import {tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {Book} from './book.model';
 import {arrayAdd, arrayRemove} from '@datorama/akita';
 import {API_KEY} from '../../config';
@@ -28,15 +28,17 @@ export class BooksService {
 
   }
 
-  getBooks({maxResults, startIndex, term}: GetBooksParams) {
-    return this.http.get<ApiResponse>(`${this.baseUrl}?q=${term}&maxResults=${maxResults}&startIndex=${startIndex}&key=${API_KEY}`,).pipe(tap((res) =>
+  getBooks({maxResults, startIndex, term}: GetBooksParams): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.baseUrl}?q=${term}&maxResults=${maxResults}&startIndex=${startIndex}&key=${API_KEY}`,)
+    .pipe(tap((res) => {
       this.store.update((state) => {
         return ({
           ...state,
           books: res.items,
           totalQueriedBooks: res.totalItems
         });
-      })))
+      })
+    }))
 
   }
 

@@ -3,12 +3,11 @@
     <input [formControl]="booksSearchTerm" id="float-input" class="p-inputtext-lg" type="text" pInputText>
   <label for="float-input">Search Books</label>
 </span>
-<ng-container *ngIf="presentedBooks$ | async as books;">
+<ng-container *ngIf="(presentedBooks$ | async ) as books;">
   <div class="book-list">
     <ng-container *ngIf="(isFetchingBooks$ | async) === false; else loading">
       <app-book-card *ngFor="let book of books"
                      (favoritesClicked)="toggleFavorites(book)"
-
                      [isInFavorites]="!!(getIsBookInFavorites(book) | async)"
                      [book]="book"></app-book-card>
     </ng-container>
